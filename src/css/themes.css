@@ -1,0 +1,241 @@
+/* =======================================================
+  🧭 THEME VARIABLE GUIDE
+  Use this reference to understand what each variable controls.
+  These are used in all themes (light, dark, desert, etc.)
+======================================================= */
+
+/* === Typography === */
+/* --font-mono: Font used across the entire app (titles, labels, buttons) */
+
+/* === Layout Backgrounds === */
+/* --color-bg: Main page background color */
+/* --color-surface: Surface background for cards or panels (optional use) */
+/* --color-sidebar-bg: Background for the left sidebar navigation */
+
+/* === Text Colors === */
+/* --color-text: Primary text color for all content */
+/* --color-muted-text: Secondary text for notes, placeholders, etc. */
+
+/* === Interaction Feedback === */
+/* --color-hover: Background color for hover states (e.g. sidebar items) */
+/* --color-focus: Background/outline color when an item is focused */
+/* --color-active-bg: Background for selected or active sidebar list item */
+/* --color-active-text: Text color for active list item */
+
+/* === Header Styling === */
+/* --color-header-1: Background color for level 1 headers (# Title) */
+/* --color-header-1-text: Text color for level 1 headers */
+/* --color-header-2-bg: Background color for level 2 headers (## Project) */
+/* --color-header-2-text: Text color for level 2 headers */
+
+/* === Special Content === */
+/* --color-note: Text color for note blocks (> Note) */
+
+/* === Visual Enhancements === */
+/* --color-outline: Outline around active task item */
+/* --color-highlight-yellow: Background for "highlighted" task (Ctrl+Alt+1) */
+/* --color-highlight-text: Text color for highlighted task (optional) */
+
+/* === Project Grouping === */
+/* --color-project-bg: Background color for project wrapper blocks */
+
+/* === Buttons === */
+/* --color-button-bg: Button background color */
+/* --color-button-hover: Button background on hover */
+/* --color-button-text: Button text color */
+
+/* === Floating Panels === */
+/* --color-legend-bg: Background for the color key panel and theme picker */
+
+/* === Labels & Tasks === */
+/* --color-label-hover: Background when hovering or focusing on task label */
+
+/* === Optional Accents (used in custom themes) */
+/* --color-accent-warm: Optional: a warm secondary color */
+/* --color-accent-bold: Optional: a strong contrasting accent */
+
+/* Default fallback */
+:root {
+  --font-mono: 'Cascadia Code', monospace;
+}
+
+/* === Desert Theme === */
+body.theme-desert {
+  --color-bg: #fdf3e7;
+  --color-surface: #e8decf;
+  --color-sidebar-bg: #d9d1c3;
+
+  --color-text: #2e2a26;
+  --color-muted-text: #5c534a;
+
+  --color-hover: rgba(60, 40, 20, 0.1);
+  --color-focus: rgba(60, 40, 20, 0.25);
+  --color-active-bg: #b8ac99;
+  --color-active-text: #ffffff;
+
+  --color-header-1: rgba(180, 160, 130, 0.2);
+  --color-header-1-text: #2b2b2b;
+
+  --color-header-2-bg: #bc6c25;
+  --color-header-2-text: #5a4633;
+
+  --color-note: #4e5a45;
+
+  --color-outline: rgba(60, 40, 20, 0.3);
+  --color-highlight-yellow: #ffe58f;
+  --color-project-bg: #d1c7b2;
+
+  --color-button-bg: #5a4633;
+  --color-button-hover: #7c6244;
+  --color-button-text: #ffffff;
+
+  --color-legend-bg: #e5dcc7;
+  --color-label-hover: rgba(133, 103, 44, 0.123);
+}
+
+/* === Dracula Theme === */
+body.theme-dracula {
+  --color-bg: #282a36;
+  --color-surface: #44475a;
+  --color-sidebar-bg: #343746;
+
+  --color-text: #f8f8f2;
+  --color-muted-text: #6272a4;
+
+  --color-hover: rgba(255, 255, 255, 0.05);
+  --color-focus: rgba(255, 255, 255, 0.12);
+  --color-active-bg: #6272a4;
+  --color-active-text: #f8f8f2;
+
+  --color-header-1: rgba(189, 147, 249, 0.15);
+  --color-header-1-text: #f8f8f2;
+
+  --color-header-2-bg: #ff79c6;
+  --color-header-2-text: #50fa7b;
+
+  --color-note: #8be9fd;
+
+  --color-outline: rgba(255, 255, 255, 0.2);
+  --color-highlight-yellow: #f1fa8c;
+  --color-project-bg: #44475a;
+
+  --color-button-bg: #50fa7b;
+  --color-button-hover: #3df06a;
+  --color-button-text: #282a36;
+
+  --color-legend-bg: #343746;
+  --color-label-hover: rgba(189, 147, 249, 0.15);
+}
+
+/* === Light Theme === */
+body.theme-light {
+  --font-mono: 'Cascadia Code', monospace;
+
+  --color-bg: #f7f7f5;
+  --color-surface: #e9e9e7;
+  --color-sidebar-bg: #dfdfdc;
+
+  --color-text: #222222;
+  --color-muted-text: #666666;
+
+  --color-hover: rgba(0, 0, 0, 0.05);
+  --color-focus: rgba(0, 0, 0, 0.1);
+  --color-active-bg: #c2c2bd;
+  --color-active-text: #000000;
+
+  --color-header-1: rgba(0, 0, 0, 0.06);
+  --color-header-1-text: #333333;
+
+  --color-header-2-bg: #444444;
+  --color-header-2-text: #4e4e4e;
+
+  --color-note: #444444;
+
+  --color-outline: rgba(0, 0, 0, 0.2);
+  --color-highlight-yellow: #fff3a6;
+  --color-highlight-text: #111111;
+  --color-label-hover: rgba(0, 0, 0, 0.05);
+
+  --color-project-bg: #e0e0dc;
+
+  --color-button-bg: #4e4e4e;
+  --color-button-hover: #6b6b6b;
+  --color-button-text: #ffffff;
+
+  --color-legend-bg: #e3e3e0;
+}
+
+/* === Dark Theme (ChatGPT-style) === */
+body.theme-dark {
+  --color-bg: #1e1e1e;
+  --color-surface: #2c2c2c;
+  --color-sidebar-bg: #252525;
+
+  --color-text: #f0f0f0;
+  --color-muted-text: #888888;
+
+  --color-hover: rgba(255, 255, 255, 0.05);
+  --color-focus: rgba(255, 255, 255, 0.15);
+  --color-active-bg: #3a3a3a;
+  --color-active-text: #ffffff;
+
+  --color-header-1: rgba(200, 200, 200, 0.1);
+  --color-header-1-text: #eaeaea;
+
+  --color-header-2-bg: #10a37f;
+  --color-header-2-text: #ffffff;
+
+  --color-note: #cccccc;
+
+  --color-outline: rgba(255, 255, 255, 0.15);
+  --color-highlight-yellow: #ffe066;
+  --color-project-bg: #333333;
+
+  --color-button-bg: #444444;
+  --color-button-hover: #666666;
+  --color-button-text: #ffffff;
+
+  --color-legend-bg: #2e2e2e;
+  --color-label-hover: rgba(255, 255, 255, 0.08);
+}
+
+/* === Earth Theme === */
+body.theme-earth {
+  --font-mono: 'Cascadia Code', monospace;
+
+  --color-bg: #fefae0;
+  --color-surface: #f2f0dd;
+  --color-sidebar-bg: #283618;
+
+  --color-text: #1e1e1b;
+  --color-muted-text: #5a5948;
+
+  --color-hover: rgba(96, 108, 56, 0.1);
+  --color-focus: rgba(96, 108, 56, 0.2);
+  --color-active-bg: #606c38;
+  --color-active-text: #ffffff;
+
+  --color-header-1: rgba(96, 108, 56, 0.25);
+  --color-header-1-text: #283618;
+
+  --color-header-2-bg: #dda15e;
+  --color-header-2-text: #283618;
+
+  --color-note: #4a5131;
+
+  --color-outline: rgba(40, 54, 24, 0.3);
+  --color-highlight-yellow: #e9f5a4;
+  --color-highlight-text: #1c1c1c;
+  --color-label-hover: rgba(96, 108, 56, 0.15);
+
+  --color-project-bg: #e3e0c5;
+
+  --color-button-bg: #606c38;
+  --color-button-hover: #4d5a2d;
+  --color-button-text: #ffffff;
+
+  --color-legend-bg: #f1edd8;
+
+  --color-accent-warm: #dda15e;
+  --color-accent-bold: #bc6c25;
+}

@@ -1,0 +1,475 @@
+/* =======================================================
+  Base Layout & Typography
+======================================================= */
+body {
+  font-family: var(--font-mono);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+}
+
+h1 {
+  margin-bottom: 24px;
+}
+
+main h1 {
+  width: 100%;
+  text-align: center;
+}
+
+/* =======================================================
+  Layout Containers
+======================================================= */
+.app-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100vh;
+  font-family: var(--font-mono);
+  position: relative;
+}
+
+.layout-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 100%;
+  justify-content: flex-start; /* Align sidebar to the left */
+}
+
+main {
+  flex: 1 1 auto;
+  max-width: 750px;
+  margin: 0 auto; /* center between sidebar and right-side key */
+  padding: 0 20px 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 750px;
+}
+
+#sidebar {
+  flex: 0 0 200px; /* fixed width, no grow or shrink */
+  height: 100vh;
+  background-color: transparent;
+  padding: 20px 14px;
+  position: sticky; /* Optional: keeps it in view on scroll */
+  top: 0;
+}
+
+ .key-spacer {
+  width: 320px; /* Match or slightly exceed the .color-key max-width */
+  flex-shrink: 0;
+}
+
+@media (max-width: 1000px) {
+  .key-spacer {
+    display: none;
+  }
+
+  .layout-row {
+    justify-content: center;
+  }
+}
+
+/* =======================================================
+  Indentation
+======================================================= */
+
+.indent-1::before,
+.indent-2::before,
+.indent-3::before,
+.indent-4::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--color-outline);
+  opacity: 0.2;
+  border-radius: 2px;
+}
+
+.task-item {
+  position: relative; /* Needed for ::before */
+}
+
+.task-item.indent-0 {
+  font-weight: 600;
+  padding-left: 4px;
+}
+
+/* =======================================================
+  List Navigation
+======================================================= */
+#listNav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.list-nav-item {
+  padding: 6px 10px;
+  border-radius: 6px;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s ease;
+  outline: none;
+  color: var(--color-text);
+}
+
+.list-nav-item:hover {
+  background-color: var(--color-hover);
+}
+
+.list-nav-item.active {
+  background-color: var(--color-active-bg);
+  color: var(--color-active-text);
+  font-weight: bold;
+}
+
+.list-nav-item:focus {
+  background-color: var(--color-focus);
+}
+
+.list-nav-item[contenteditable="true"] {
+  border: 1px solid var(--color-outline);
+  padding: 5px 9px; /* adjust to compensate for border */
+  background-color: var(--color-input-bg, #5f5f5f); /* Optional */
+  cursor: text;
+}
+
+/* =======================================================
+  Task List
+======================================================= */
+#taskListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  max-width: 100%;
+}
+
+.task-item.active {
+  outline: 1px solid var(--color-outline);
+  border-radius: 4px;
+}
+
+.task-item.checked .task-label {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.task-label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  background-color: transparent;
+  outline: none;
+  caret-color: var(--color-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  transition: background-color 0.2s ease;
+}
+
+.task-label:hover,
+.task-label:focus {
+  background-color: var(--color-label-hover);
+}
+
+/* =======================================================
+  Headers & Block Types
+======================================================= */
+.header-1 {
+  background-color: var(--color-header-1);
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: var(--color-header-1-text);
+}
+
+.header-2 {
+  background-color: var(--color-header-2);
+  color: var(--color-header-2-text);
+  padding: 4px 0;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 6px;
+}
+
+.note-block {
+  font-style: italic;
+  opacity: 1;
+  color: var(--color-note);
+}
+
+.highlight-yellow {
+  background-color: var(--color-highlight-yellow) !important;
+  color: #111 !important; /* Force dark font for contrast */
+}
+
+/* =======================================================
+  Project Grouping
+======================================================= */
+.project-wrapper {
+  background-color: var(--color-project-bg);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+.project-wrapper .task-item {
+  margin-bottom: 6px;
+}
+
+/* =======================================================
+  Indentation Utilities
+======================================================= */
+.indent-1 { margin-left: 20px; }
+.indent-2 { margin-left: 40px; }
+.indent-3 { margin-left: 60px; }
+.indent-4 { margin-left: 80px; }
+
+/* =======================================================
+  Buttons
+======================================================= */
+#exportJsonBtn,
+#importJsonTrigger {
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#exportJsonBtn:hover,
+#importJsonTrigger:hover {
+  background-color: var(--color-button-hover);
+}
+
+/* =======================================================
+  Color Key Legend
+======================================================= */
+.color-key {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--color-legend-bg);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  max-width: 300px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.color-key select {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  border: none;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.color-key-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+#toggleKeyIndicator {
+  font-size: 16px;
+  font-family: var(--font-mono);
+  color: inherit;
+  padding: 0 4px;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none; /* don't treat as a button */
+}
+
+.color-key-body {
+  display: none;
+  grid-template-columns: auto auto;
+  gap: 4px 12px;
+  align-items: center;
+}
+
+.color-key.open .color-key-body {
+  display: grid;
+}
+
+.color-key-body > div {
+  display: contents;
+}
+
+.color-label,
+.color-shortcut {
+  white-space: nowrap;
+  text-align: left;
+}
+
+.color-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* =======================================================
+  Highlight Colors
+======================================================= */
+
+.highlight-blue {
+  background-color: rgba(70, 130, 255, 0.5) !important;
+  color: #111 !important;
+}
+
+.highlight-purple {
+  background-color: rgba(180, 90, 220, 0.5) !important;
+  color: #111 !important;
+}
+
+.highlight-red {
+  background-color: rgba(255, 60, 60, 0.5) !important;
+  color: #111 !important;
+}
+
+/* =======================================================
+  Floating Theme Picker
+======================================================= */
+.theme-picker {
+  position: fixed;
+  top: 140px; /* Below the color-key */
+  right: 20px;
+  background-color: var(--color-legend-bg);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme-picker label {
+  font-weight: bold;
+}
+
+.theme-picker select {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  border: none;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* =======================================================
+  Inline Code / Keyboard
+======================================================= */
+kbd {
+  background: var(--color-button-bg);
+  color: var(--color-button-text);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+code {
+  background: var(--color-button-bg);
+  color: var(--color-button-text);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: inherit;
+}
+
+/* =======================================================
+  Version Box
+======================================================= */
+#versionBox {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--color-text);
+  pointer-events: none;
+  user-select: none;
+  z-index: 999;
+}
+
+/* =======================================================
+  Animation
+======================================================= */
+/* Slide-out + collapse effect */
+.task-slide-out {
+  transition: opacity 0.2s ease, transform 0.2s ease, height 0.2s ease, margin 0.2s ease;
+  opacity: 0;
+  transform: translateX(20px);
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Slide-in effect (reset after move) */
+.task-slide-in {
+  animation: slideInTask 0.2s ease;
+}
+
+@keyframes slideInTask {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
