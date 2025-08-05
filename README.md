@@ -1,16 +1,16 @@
 # 👊 Punch List
 
-A fast, keyboard-first checklist app for organizing and tracking nested tasks with Markdown-inspired shortcuts. Built for engineers, project managers, and obsessive note-takers.
+A fast, keyboard-first checklist app for organizing and tracking nested tasks with Markdown-inspired shortcuts.
 
 ## ✨ Features
 
 - ✅ Keyboard-driven task management
 - 🧱 Support for indentation, project headers, notes, and labels
 - 🎨 Custom highlight styles (In Progress, Follow Up, Hold, etc.)
-- 💾 Auto-saves to localStorage
+- 💾 Auto-saves to local browser storage
 - 📁 JSON import/export for backup and sharing
 - 🧭 Sidebar for list navigation
-- 📎 Optional floating key legend with shortcuts
+- 📎 floating key legend with shortcuts
 - 💻 Works offline, no login or backend required
 
 ## 🔤 Supported Syntax
@@ -70,3 +70,6 @@ All data is saved locally in your browser using `localStorage`. No tracking, no 
 ## 📜 License
 
 MIT — use it, fork it, make it your own.
+
+## Future Updates Planned
+- Dockerized & Self Hosted. Will stay as a dumb html interface for the time being
