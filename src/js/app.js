@@ -30,8 +30,8 @@ function updateShortcutLabels() {
     arrowright: '→',
     enter: 'Enter',
     tab: 'Tab',
-    backspace: '⌫',
-    delete: '⌦',
+    backspace: 'Bksp',
+    delete: 'Del',
     space: 'Space'
     // Add more keys if needed
   };
@@ -69,15 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const colorKey = document.querySelector('.color-key');
   const themeSelect = document.getElementById('themeSelector');
   const toggleIndicator = document.getElementById('toggleKeyIndicator');
+  const appContainer = document.querySelector('.app-container');
 
   if (colorKey) {
     colorKey.addEventListener('click', (e) => {
       if (themeSelect && themeSelect.contains(e.target)) return;
 
       colorKey.classList.toggle('open');
-
       if (toggleIndicator) {
         toggleIndicator.textContent = colorKey.classList.contains('open') ? '−' : '+';
+      }
+
+      // 👉 Dynamically resize main content area
+      if (appContainer) {
+        appContainer.classList.toggle('key-open', colorKey.classList.contains('open'));
       }
     });
   }
@@ -447,29 +452,36 @@ function updateActiveTaskHighlight() {
 function regroupProjects() {
   const allItems = [...taskList.querySelectorAll('.task-item')];
   taskList.innerHTML = '';
+
   let currentWrapper = null;
+  let insideWrapper = false;
 
   for (let i = 0; i < allItems.length; i++) {
     const li = allItems[i];
     const label = li.querySelector('.task-label');
     const indent = getIndentLevel(li);
+    const isHeader2 = label?.classList.contains('header-2');
 
-    // Start a new project wrapper at any indent-0 .header-2 line
-    if (indent === 0 && label.classList.contains('header-2')) {
+    // Start a new project wrapper
+    if (indent === 0 && isHeader2) {
       currentWrapper = document.createElement('div');
       currentWrapper.className = 'project-wrapper';
       taskList.appendChild(currentWrapper);
       currentWrapper.appendChild(li);
+      insideWrapper = true;
       continue;
     }
 
-    // Add to project if in a wrapper
-    if (currentWrapper) {
+    // If inside a wrapper, and this task was previously inside it, keep it there
+    if (insideWrapper && li.closest('.project-wrapper')) {
       currentWrapper.appendChild(li);
-    } else {
-      // Otherwise, it's root level (not in a project)
-      taskList.appendChild(li);
+      continue;
     }
+
+    // Otherwise, append outside
+    taskList.appendChild(li);
+    insideWrapper = false;
+    currentWrapper = null;
   }
 }
 
@@ -480,35 +492,58 @@ function updateCheckboxState(checkbox) {
 
   const moveToContainer = wrapper || taskList;
 
-  if (checkbox.checked) {
-    li.classList.add('checked');
-    label.style.textDecoration = 'line-through';
-    label.style.opacity = '0.5';
-    li.style.backgroundColor = 'rgba(0, 200, 0, 0.25)';
+  const indent = getIndentLevel(li);
 
-    // Slide out
-    li.classList.add('task-slide-out');
+  // === Find all children of this task
+  const allTasks = [...taskList.querySelectorAll('.task-item')];
+  const startIndex = allTasks.indexOf(li);
+  let group = [li];
+
+  for (let i = startIndex + 1; i < allTasks.length; i++) {
+    const next = allTasks[i];
+    const nextIndent = getIndentLevel(next);
+
+    if (nextIndent > indent) {
+      group.push(next);
+    } else {
+      break;
+    }
+  }
+
+  if (checkbox.checked) {
+    group.forEach(item => {
+      item.classList.add('checked');
+      item.style.backgroundColor = 'rgba(0, 200, 0, 0.25)';
+      const label = item.querySelector('.task-label');
+      label.style.textDecoration = 'line-through';
+      label.style.opacity = '0.5';
+    });
+
+    // Slide out the whole group
+    group.forEach(item => item.classList.add('task-slide-out'));
 
     setTimeout(() => {
-      li.classList.remove('task-slide-out');
+      group.forEach(item => item.classList.remove('task-slide-out'));
 
-      // Move to bottom
-      moveToContainer.appendChild(li);
+      // Move to bottom of container
+      group.forEach(item => moveToContainer.appendChild(item));
 
-      // Slide in
-      li.classList.add('task-slide-in');
+      group.forEach(item => item.classList.add('task-slide-in'));
 
-      // Cleanup and save order
       setTimeout(() => {
-        li.classList.remove('task-slide-in');
-        saveCurrentList(); // ✅ SAVE HERE AFTER DOM MOVE
+        group.forEach(item => item.classList.remove('task-slide-in'));
+        saveCurrentList(); // ✅ save after moving
       }, 200);
     }, 200);
+
   } else {
-    li.classList.remove('checked');
-    label.style.textDecoration = 'none';
-    label.style.opacity = '1';
-    li.style.backgroundColor = '';
+    group.forEach(item => {
+      item.classList.remove('checked');
+      item.style.backgroundColor = '';
+      const label = item.querySelector('.task-label');
+      label.style.textDecoration = 'none';
+      label.style.opacity = '1';
+    });
 
     saveCurrentList(); // also save immediately on uncheck
   }
@@ -571,23 +606,18 @@ function moveTaskUp(li) {
       }
     }
 
-    // --- Find previous indent-0 to insert above
-    let prevIndex = index - 1;
-    while (prevIndex > 0 && getIndentLevel(allItems[prevIndex]) > 0) {
-      prevIndex--;
-    }
-    if (prevIndex < 0) return; // already at top
+    // --- Find previous task to insert before (not previous indent-0 group)
+    const prev = allItems[index - 1];
+    const insertBefore = prev;
 
-    // Find where the previous group starts
-    const insertBefore = allItems[prevIndex];
-
-    // Insert each node in group before previous group
     group.forEach(node => insertBefore.parentElement.insertBefore(node, insertBefore));
 
-    // === Fix: After regroupProjects, wrappers will be rebuilt
     regroupProjects();
     saveCurrentList();
-    setTimeout(() => setCaretPosition(label, caretOffset), 0);
+    setTimeout(() => {
+      label.focus();
+      setCaretPosition(label, caretOffset);
+    }, 0);
     return;
   }
 
@@ -599,13 +629,20 @@ function moveTaskUp(li) {
     li.className = 'task-item';
     regroupProjects();
     saveCurrentList();
-    setTimeout(() => setCaretPosition(label, caretOffset), 0);
+    setTimeout(() => {
+      label.focus();
+      setCaretPosition(label, caretOffset);
+    }, 0);
     return;
   }
+
   prev.parentElement.insertBefore(li, prev);
   regroupProjects();
   saveCurrentList();
-  setTimeout(() => setCaretPosition(label, caretOffset), 0);
+  setTimeout(() => {
+    label.focus();
+    setCaretPosition(label, caretOffset);
+  }, 0);
 }
 
 function moveTaskDown(li) {
@@ -633,11 +670,31 @@ function moveTaskDown(li) {
     }
   }
 
+  const nextIndex = index + group.length;
+  const wrapper = li.closest('.project-wrapper');
+
+  // 🛠 FIX: If this is the second-to-last item in wrapper, and the last one is not a header
+  if (wrapper) {
+    const wrapperItems = [...wrapper.querySelectorAll('.task-item')];
+    const lastInWrapper = wrapperItems[wrapperItems.length - 1];
+    const secondLastInWrapper = wrapperItems[wrapperItems.length - 2];
+
+    // If we're the second-to-last in the wrapper, move to end of wrapper
+    if (secondLastInWrapper === li) {
+      group.forEach(el => wrapper.appendChild(el));
+      setTimeout(() => setCaretPosition(label, caretOffset), 0);
+      regroupProjects();
+      saveCurrentList();
+      return;
+    }
+  }
+
   // --- Find the start of the next sibling group at same indent or less
-  let nextGroupStart = index + group.length;
+  let nextGroupStart = nextIndex;
   while (nextGroupStart < allItems.length && getIndentLevel(allItems[nextGroupStart]) > indent) {
     nextGroupStart++;
   }
+
   if (nextGroupStart >= allItems.length) {
     // At end: just append group to the end
     group.forEach(el => taskList.appendChild(el));
@@ -654,9 +711,9 @@ function moveTaskDown(li) {
     if (getIndentLevel(allItems[nextGroupEnd]) <= nextIndent) break;
   }
 
-  // Insert after the end of next group
   const insertAfter = allItems[nextGroupEnd] || null;
   const insertParent = insertAfter?.parentElement || taskList;
+
   group.forEach(el => insertParent.insertBefore(el, insertAfter));
 
   setTimeout(() => setCaretPosition(label, caretOffset), 0);
@@ -708,9 +765,14 @@ function handleKeyboardEvents(e) {
       updateCheckboxState(checkbox);
       label.focus();
       setTimeout(() => {
-        ensureTextNode(label);
-        setCaretPosition(label, caretOffset);
+        const fresh = li.querySelector('.task-label');
+        if (fresh) {
+          ensureTextNode(fresh);
+          fresh.focus();
+          setCaretPosition(fresh, caretOffset);
+        }
       }, 0);
+
       return;
     }
   }
@@ -811,142 +873,157 @@ function handleKeyboardEvents(e) {
     return;
   }
 
-  // ===============================
-  // Backspace → remove style or task
-  // ===============================
-  if (key === 'backspace') {
-    const selection = window.getSelection();
-    const cursorAtStart = selection?.anchorOffset === 0 && selection.isCollapsed;
+// ===============================
+// Backspace → remove style or task
+// ===============================
+if (key === 'backspace') {
+  const selection = window.getSelection();
+  const cursorAtStart = selection?.anchorOffset === 0 && selection.isCollapsed;
 
-    if (cursorAtStart) {
-      const text = label.innerText;
-      const classesToRemove = ['header-1', 'header-2', 'note-block', 'highlight-yellow'];
+  if (cursorAtStart) {
+    const text = label.innerText;
+    const classesToRemove = ['header-1', 'header-2', 'note-block', 'highlight-yellow'];
 
-      for (const className of classesToRemove) {
-        if (label.classList.contains(className)) {
-          label.classList.remove(className);
+    for (const className of classesToRemove) {
+      if (label.classList.contains(className)) {
+        label.classList.remove(className);
 
-          let newText = text;
-          if (text.startsWith('# ')) newText = text.slice(2);
-          else if (text.startsWith('## ')) newText = text.slice(3);
-          else if (text.startsWith('> ')) newText = text.slice(2);
-          else if (text.startsWith('- ')) newText = text.slice(2);
+        let newText = text;
+        if (text.startsWith('# ')) newText = text.slice(2);
+        else if (text.startsWith('## ')) newText = text.slice(3);
+        else if (text.startsWith('> ')) newText = text.slice(2);
+        else if (text.startsWith('- ')) newText = text.slice(2);
 
-          setTimeout(() => {
-            label.innerText = newText;
-            ensureTextNode(label);
-            setCaretPosition(label, 0);
-
-            // --- [NEW: Remove from .project-wrapper if header-2 demoted] ---
-            if (className === 'header-2') {
-              const wrapper = li.closest('.project-wrapper');
-              if (wrapper) {
-                // Find all items after this li that are not header-2 (these are the "children")
-                let moving = [li];
-                let next = li.nextElementSibling;
-                while (next && !next.querySelector('.task-label').classList.contains('header-2')) {
-                  moving.push(next);
-                  next = next.nextElementSibling;
-                }
-
-                // Insert after the wrapper in the root container
-                let afterWrapper = wrapper.nextSibling;
-                moving.forEach(item => {
-                  taskList.insertBefore(item, afterWrapper);
-                });
-
-                // Remove the wrapper if empty
-                if (!wrapper.querySelector('.task-item')) {
-                  wrapper.remove();
-                }
-              }
-            }
-          }, 0);
-
-          e.preventDefault();
-          saveCurrentList();
-          return;
-        }
-      }
-
-      const checkbox = li.querySelector('input[type="checkbox"]');
-      if (checkbox && checkbox === li.firstElementChild) {
-        const textOnly = label.innerText;
-        li.innerHTML = '';
-        const plainTask = createTaskElement({ text: textOnly });
-        li.replaceWith(plainTask);
         setTimeout(() => {
-          const plainLabel = plainTask.querySelector('.task-label');
-          ensureTextNode(plainLabel);
-          setCaretPosition(plainLabel, 0);
+          label.innerText = newText;
+          ensureTextNode(label);
+          label.focus();
+          setCaretPosition(label, 0);
+
+          // --- [Fix: Handle demotion of header-2] ---
+          if (className === 'header-2') {
+            const wrapper = li.closest('.project-wrapper');
+            if (wrapper) {
+              // Move all children out of the wrapper
+              let moving = [li];
+              let next = li.nextElementSibling;
+              while (
+                next &&
+                !next.querySelector('.task-label').classList.contains('header-2')
+              ) {
+                moving.push(next);
+                next = next.nextElementSibling;
+              }
+
+              let afterWrapper = wrapper.nextSibling;
+              moving.forEach(item => taskList.insertBefore(item, afterWrapper));
+
+              if (!wrapper.querySelector('.task-item')) {
+                wrapper.remove();
+              }
+
+              // Restore caret after DOM updates
+              setTimeout(() => {
+                const newLabel = li.querySelector('.task-label');
+                if (newLabel) {
+                  ensureTextNode(newLabel);
+                  newLabel.focus();
+                  setCaretPosition(newLabel, 0);
+                }
+              }, 0);
+            }
+          }
         }, 0);
-        regroupProjects();
+
         e.preventDefault();
         saveCurrentList();
         return;
       }
     }
 
-    const trimmed = label.innerText.trim();
-    const isStyled = label.classList.contains('header-1') ||
-                     label.classList.contains('header-2') ||
-                     label.classList.contains('note-block') ||
-                     li.querySelector('input[type="checkbox"]');
-
-    if (trimmed === '') {
-      e.preventDefault();
-
-      if (isStyled) {
-        li.innerHTML = '';
-        const plain = createTaskElement({ text: '' });
-        li.replaceWith(plain);
-        regroupProjects();
-        setTimeout(() => {
-          const plainLabel = plain.querySelector('.task-label');
+    const checkbox = li.querySelector('input[type="checkbox"]');
+    if (checkbox && checkbox === li.firstElementChild) {
+      const textOnly = label.innerText;
+      li.innerHTML = '';
+      const plainTask = createTaskElement({ text: textOnly });
+      li.replaceWith(plainTask);
+      setTimeout(() => {
+        const plainLabel = plainTask.querySelector('.task-label');
+        if (plainLabel) {
           ensureTextNode(plainLabel);
-          placeCursorAtEnd(plainLabel);
-        }, 0);
-      } else {
-        const parent = li.parentElement;
-        const prev = li.previousElementSibling;
-        const grandParent = parent.parentElement;
-
-        parent.removeChild(li);
-
-        let nextFocusTarget = null;
-        if (prev) {
-          nextFocusTarget = prev.querySelector('.task-label');
-        } else if (parent.classList.contains('project-wrapper')) {
-          const wrapperPrev = parent.previousElementSibling;
-          if (wrapperPrev) {
-            const label = wrapperPrev.querySelector('.task-item:last-child .task-label');
-            if (label) nextFocusTarget = label;
-          } else if (grandParent?.classList.contains('app-container')) {
-            const all = [...taskList.querySelectorAll('.task-label')];
-            nextFocusTarget = all[all.length - 1];
-          }
+          plainLabel.focus();
+          setCaretPosition(plainLabel, 0);
         }
-
-        if (
-          parent.classList.contains('project-wrapper') &&
-          parent.querySelectorAll('.task-item').length === 0
-        ) {
-          parent.remove();
-        }
-
-        setTimeout(() => {
-          if (nextFocusTarget) {
-            ensureTextNode(nextFocusTarget);
-            placeCursorAtEnd(nextFocusTarget);
-          }
-          else ensureAtLeastOneTask();
-        }, 0);
-      }
-
+      }, 0);
+      regroupProjects();
+      e.preventDefault();
       saveCurrentList();
       return;
     }
   }
+
+  const trimmed = label.innerText.trim();
+  const isStyled =
+    label.classList.contains('header-1') ||
+    label.classList.contains('header-2') ||
+    label.classList.contains('note-block') ||
+    li.querySelector('input[type="checkbox"]');
+
+  if (trimmed === '') {
+    e.preventDefault();
+
+    if (isStyled) {
+      li.innerHTML = '';
+      const plain = createTaskElement({ text: '' });
+      li.replaceWith(plain);
+      regroupProjects();
+      setTimeout(() => {
+        const plainLabel = plain.querySelector('.task-label');
+        ensureTextNode(plainLabel);
+        placeCursorAtEnd(plainLabel);
+      }, 0);
+    } else {
+      const parent = li.parentElement;
+      const prev = li.previousElementSibling;
+      const grandParent = parent.parentElement;
+
+      parent.removeChild(li);
+
+      let nextFocusTarget = null;
+      if (prev) {
+        nextFocusTarget = prev.querySelector('.task-label');
+      } else if (parent.classList.contains('project-wrapper')) {
+        const wrapperPrev = parent.previousElementSibling;
+        if (wrapperPrev) {
+          const label = wrapperPrev.querySelector('.task-item:last-child .task-label');
+          if (label) nextFocusTarget = label;
+        } else if (grandParent?.classList.contains('app-container')) {
+          const all = [...taskList.querySelectorAll('.task-label')];
+          nextFocusTarget = all[all.length - 1];
+        }
+      }
+
+      if (
+        parent.classList.contains('project-wrapper') &&
+        parent.querySelectorAll('.task-item').length === 0
+      ) {
+        parent.remove();
+      }
+
+      setTimeout(() => {
+        if (nextFocusTarget) {
+          ensureTextNode(nextFocusTarget);
+          placeCursorAtEnd(nextFocusTarget);
+        } else {
+          ensureAtLeastOneTask();
+        }
+      }, 0);
+    }
+
+    saveCurrentList();
+    return;
+  }
+}
 
   // ===============================
   // Color Tags (Ctrl + Alt + 1–4)
@@ -1034,33 +1111,60 @@ taskList.addEventListener('input', e => {
   const [_, prefix, rest] = match;
 
   setTimeout(() => {
+    const indent = getIndentLevel(li);
+
+    const restoreCaret = (el, pos = 0) => {
+      if (!el) return;
+      ensureTextNode(el);
+      el.focus();
+      setCaretPosition(el, pos);
+    };
+
+    let newLabel;
+
     if (prefix === '-') {
-      // Turn line into a checkbox
-      const currentIndent = getIndentLevel(li);
       const checkboxTask = createTaskElement({
         text: rest,
         type: 'checkbox',
-        indent: currentIndent
+        indent
       });
       li.replaceWith(checkboxTask);
-      setTimeout(() => placeCursorAtEnd(checkboxTask.querySelector('.task-label')), 0);
+      newLabel = checkboxTask.querySelector('.task-label');
+      restoreCaret(newLabel, rest.length);
+
     } else if (prefix === '#') {
-      target.className = 'task-label header-2';
-      target.innerText = rest;
-      li.className = 'task-item';
-      regroupProjects();
-      setTimeout(() => placeCursorAtEnd(target), 0);
+      const headerTask = createTaskElement({
+        text: rest,
+        type: 'header-2',
+        indent
+      });
+      li.replaceWith(headerTask);
+      newLabel = headerTask.querySelector('.task-label');
+
     } else if (prefix === '##') {
-      target.className = 'task-label header-1';
-      target.innerText = rest;
-      li.className = 'task-item';
-      setTimeout(() => placeCursorAtEnd(target), 0);
+      const headerTask = createTaskElement({
+        text: rest,
+        type: 'header-1',
+        indent
+      });
+      li.replaceWith(headerTask);
+      newLabel = headerTask.querySelector('.task-label');
+
     } else if (prefix === '>') {
       li.innerHTML = `<span class="task-label note-block" contenteditable="true">${rest}</span>`;
       const note = li.querySelector('.task-label');
       note.addEventListener('paste', handlePaste);
-      setTimeout(() => placeCursorAtEnd(note), 0);
+      restoreCaret(note, rest.length);
+      saveCurrentList();
+      return;
     }
+
+    // Regroup and restore caret for # / ## only
+    setTimeout(() => {
+      regroupProjects();
+      restoreCaret(newLabel, rest.length);
+    }, 50);
+
     saveCurrentList();
   }, 0);
 });
@@ -1154,9 +1258,13 @@ document.addEventListener('keydown', e => {
       regroupProjects();
       saveCurrentList();
 
-      // 🧠 Restore caret after DOM update
       setTimeout(() => {
-        setCaretPosition(active, caretOffset);
+        const fresh = li.querySelector('.task-label');
+        if (fresh) {
+          ensureTextNode(fresh);
+          fresh.focus();
+          setCaretPosition(fresh, caretOffset);
+        }
       }, 0);
 
       return;
