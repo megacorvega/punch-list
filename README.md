@@ -1,75 +1,57 @@
-# 👊 Punch List
+# Punch List
 
-A fast, keyboard-first checklist app for organizing and tracking nested tasks with Markdown-inspired shortcuts.
+**Punch List** is a lightweight, keyboard-driven task management app optimized for fast note-taking, checklists, and project breakdowns. Built with Markdown-like syntax and intuitive shortcuts, it runs entirely in the browser with persistent local storage — no accounts or servers required.
 
-## ✨ Features
+---
 
-- ✅ Keyboard-driven task management
-- 🧱 Support for indentation, project headers, notes, and labels
-- 🎨 Custom highlight styles (In Progress, Follow Up, Hold, etc.)
-- 💾 Auto-saves to local browser storage
-- 📁 JSON import/export for backup and sharing
-- 🧭 Sidebar for list navigation
-- 📎 floating key legend with shortcuts
-- 💻 Works offline, no login or backend required
+## Features
 
-## 🔤 Supported Syntax
+- **Markdown-Inspired Syntax**  
+  Use `#` for project headers, `##` for sub-sections, and plain text for tasks.
 
-You can type directly into the editor using:
+- **Keyboard Shortcuts**  
+  - `Shift + Enter`: Toggle checkmark & green highlight  
+  - `Alt + H`: Toggle yellow highlight  
+  - `Ctrl + Enter`: Break out of project  
+  - `Tab` / `Shift + Tab`: Indent or outdent tasks  
+  - Arrow keys to navigate between tasks
 
-- `# Title` – Project Header
-- `## Section` – Subsection Header
-- `- Task` – Checkbox Task
-- `> Note` – Italicized note block
-- `Ctrl/Cmd + Alt + [1–4]` – Apply color highlights
+- **Auto Grouping & Styling**  
+  Tasks under `#` headers are grouped visually. Background colors adapt to header types.
 
-## ⌨️ Keyboard Shortcuts
+- **Local Persistence**  
+  Your punch list is saved to your browser automatically using `localStorage`.
 
-| Action                | Shortcut                    |
-|-----------------------|-----------------------------|
-| New Line              | `Enter`                     |
-| Indent / Unindent     | `Tab` / `Shift + Tab`       |
-| Check / Uncheck       | `Shift + Enter`             |
-| Move Task Up/Down     | `Shift + ↑ / ↓`             |
-| Move Project Up/Down  | `Ctrl + Alt + Shift + ↑ / ↓`|
-| Break Out of Project  | `Ctrl + Enter`              |
-| Create/Delete List    | `Ctrl + Alt + N / D`        |
-| Switch List           | `Ctrl + Alt + W / S`        |
-| Apply Highlight       | `Ctrl + Alt + [1–4]`        |
+- **Drag & Drop & Reordering**  
+  Tasks and sections can be moved up/down with shortcut keys or mouse.
 
-## 📦 Development
+---
 
-Clone the repo and open the `index.html` file in your browser.
+## How to Use
+
+1. Start typing tasks directly — each line is a new task.
+2. Use `# Project Title` or `## Subtask Group` to create structured sections.
+3. Use keyboard shortcuts to navigate, complete, or highlight tasks.
+4. Your changes are saved automatically in the browser.
+
+> Checked tasks will move to the bottom of the list or section automatically. Unchecking returns them to their original position.
+
+---
+
+## Deployment
+
+To self-host:
 
 ```bash
-git clone https://github.com/yourusername/punch-list.git
+git clone https://github.com/your-username/punch-list.git
 cd punch-list
 open index.html
 ```
 
-> 💡 No build step required — it’s just HTML, CSS, and JS.
+Or serve with Docker + Nginx (optional for local hosting or deployment).
 
-## 📁 Folder Structure
+---
 
-```
-/punch-list
-│
-├── index.html
-├── /src
-│   ├── /css
-│   │   ├── style.css
-│   │   └── themes.css
-│   └── /js
-│       └── app.js
-```
+## License
 
-## 🔒 Privacy & Storage
-
-All data is saved locally in your browser using `localStorage`. No tracking, no cloud, no nonsense.
-
-## 📜 License
-
-MIT — use it, fork it, make it your own.
-
-## Future Updates Planned
-- Dockerized & Self Hosted. Will stay as a dumb html interface for the time being
+MIT © [Your Name]
