@@ -1,4 +1,4 @@
-# Punch List
+# 👊 Punch List
 
 **Punch List** is a lightweight, keyboard-driven task management app optimized for fast note-taking, checklists, and project breakdowns. Built with Markdown-like syntax and intuitive shortcuts, it runs entirely in the browser with persistent local storage — no accounts or servers required.
 
