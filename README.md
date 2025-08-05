@@ -10,11 +10,8 @@
   Use `#` for project headers, `##` for sub-sections, and plain text for tasks.
 
 - **Keyboard Shortcuts**  
-  - `Shift + Enter`: Toggle checkmark & green highlight  
-  - `Alt + H`: Toggle yellow highlight  
-  - `Ctrl + Enter`: Break out of project  
-  - `Tab` / `Shift + Tab`: Indent or outdent tasks  
-  - Arrow keys to navigate between tasks
+  - Primarily driven by keyboard shortcuts
+  - Built in shortcut guide to streamline workflow
 
 - **Auto Grouping & Styling**  
   Tasks under `#` headers are grouped visually. Background colors adapt to header types.
