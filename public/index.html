@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../src/css/style.css" />
 </head>
 <body>
-  <div id="versionBox">v0.9.5</div>
+  <div id="versionBox">v0.9.6</div>
 
   <div class="app-container">
 
@@ -27,16 +27,18 @@
       <!-- Main Content Area -->
       <main>
         <div class="main-content">
-          <h1>👊 Punch List</h1>
+          <div class="main-safe">
+            <h1>👊 Punch List</h1>
 
-          <!-- Task List Display Area -->
-          <section id="taskListContainer" aria-label="Task List"></section>
+            <!-- Task List Display Area -->
+            <section id="taskListContainer" aria-label="Task List"></section>
 
-          <!-- JSON Import/Export Controls -->
-          <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 8px;">
-            <button id="exportJsonBtn" aria-label="Export JSON">Export JSON</button>
-            <button id="importJsonTrigger" aria-label="Import JSON">Import JSON</button>
-            <input type="file" id="importJsonInput" accept=".json" style="display: none;" />
+            <!-- JSON Import/Export Controls -->
+            <div style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 8px;">
+              <button id="exportJsonBtn" aria-label="Export JSON">Export JSON</button>
+              <button id="importJsonTrigger" aria-label="Import JSON">Import JSON</button>
+              <input type="file" id="importJsonInput" accept=".json" style="display: none;" />
+            </div>
           </div>
         </div>
       </main>
@@ -45,67 +47,65 @@
     </div>
 
     <!-- Keyboard Shortcut Info Panel -->
-<!-- Keyboard Shortcut Info Panel -->
-<aside class="color-key" role="button" tabindex="0">
-  <div class="color-key-header">
-    <span>Key</span>
-    <span id="toggleKeyIndicator" aria-hidden="true">+</span>
-  </div>
+    <aside class="color-key" role="button" tabindex="0">
+      <div class="color-key-header">
+        <span>Key</span>
+        <span id="toggleKeyIndicator" aria-hidden="true">+</span>
+      </div>
 
-  <div class="color-key-body">
-    <div class="key-row"><span>Indent</span><kbd data-shortcut="tab">Tab</kbd></div>
-    <div class="key-row"><span>Unindent</span><kbd data-shortcut="shift-tab">⇧ + Tab</kbd></div>
-    <div class="key-row"><span>New Line</span><kbd data-shortcut="enter">Enter</kbd></div>
-    <div class="key-row"><span>Break Out of Project</span><kbd data-shortcut="ctrl-enter">⌘ + Enter</kbd></div>
-    <div class="key-row"><span>Check / Uncheck</span><kbd data-shortcut="shift-enter">⇧ + Enter</kbd></div>
-    <div class="key-row"><span>Delete / Unstyle</span><kbd data-shortcut="backspace">Backspace</kbd></div>
-    <div class="key-row"><span>Move Task Up</span><kbd data-shortcut="shift-arrowup">⇧ + ↑</kbd></div>
-    <div class="key-row"><span>Move Task Down</span><kbd data-shortcut="shift-arrowdown">⇧ + ↓</kbd></div>
-    <div class="key-row"><span>Move Project Up</span><kbd data-shortcut="ctrl-alt-shift-arrowup">⌘ + ⌥ + ⇧ + ↑</kbd></div>
-    <div class="key-row"><span>Move Project Down</span><kbd data-shortcut="ctrl-alt-shift-arrowdown">⌘ + ⌥ + ⇧ + ↓</kbd></div>
-    <div class="key-row"><span>Switch List Up</span><kbd data-shortcut="ctrl-alt-w">⌘ + ⌥ + W</kbd></div>
-    <div class="key-row"><span>Switch List Down</span><kbd data-shortcut="ctrl-alt-s">⌘ + ⌥ + S</kbd></div>
-    <div class="key-row"><span>Move List Up</span><kbd data-shortcut="ctrl-alt-shift-w">⌘ + ⌥ + ⇧ + W</kbd></div>
-    <div class="key-row"><span>Move List Down</span><kbd data-shortcut="ctrl-alt-shift-s">⌘ + ⌥ + ⇧ + S</kbd></div>
-    <div class="key-row"><span>New List</span><kbd data-shortcut="ctrl-alt-n">⌘ + ⌥ + N</kbd></div>
-    <div class="key-row"><span>Delete List</span><kbd data-shortcut="ctrl-alt-d">⌘ + ⌥ + D</kbd></div>
-    <div class="key-row"><span>Header 1</span><code>#</code></div>
-    <div class="key-row"><span>Header 2</span><code>##</code></div>
-    <div class="key-row"><span>Checkbox</span><code>-</code></div>
-    <div class="key-row"><span>Note</span><code>></code></div>
-    <div class="key-row">
-      <span><span class="color-swatch" style="background: yellow;"></span>Highlight</span>
-      <kbd data-shortcut="ctrl-alt-1">⌘ + ⌥ + 1</kbd>
-    </div>
-    <div class="key-row">
-      <span><span class="color-swatch" style="background: rgba(70,130,255,0.5);"></span>In Progress</span>
-      <kbd data-shortcut="ctrl-alt-2">⌘ + ⌥ + 2</kbd>
-    </div>
-    <div class="key-row">
-      <span><span class="color-swatch" style="background: rgba(180,90,220,0.5);"></span>Follow Up</span>
-      <kbd data-shortcut="ctrl-alt-3">⌘ + ⌥ + 3</kbd>
-    </div>
-    <div class="key-row">
-      <span><span class="color-swatch" style="background: rgba(255,60,60,0.5);"></span>Hold</span>
-      <kbd data-shortcut="ctrl-alt-4">⌘ + ⌥ + 4</kbd>
-    </div>
-  </div>
+      <div class="color-key-body">
+        <div class="key-row"><span>Indent</span><kbd data-shortcut="tab">Tab</kbd></div>
+        <div class="key-row"><span>Unindent</span><kbd data-shortcut="shift-tab">⇧ + Tab</kbd></div>
+        <div class="key-row"><span>New Line</span><kbd data-shortcut="enter">Enter</kbd></div>
+        <div class="key-row"><span>Break Out of Project</span><kbd data-shortcut="ctrl-enter">⌘ + Enter</kbd></div>
+        <div class="key-row"><span>Check / Uncheck</span><kbd data-shortcut="shift-enter">⇧ + Enter</kbd></div>
+        <div class="key-row"><span>Delete / Unstyle</span><kbd data-shortcut="backspace">Backspace</kbd></div>
+        <div class="key-row"><span>Move Task Up</span><kbd data-shortcut="shift-arrowup">⇧ + ↑</kbd></div>
+        <div class="key-row"><span>Move Task Down</span><kbd data-shortcut="shift-arrowdown">⇧ + ↓</kbd></div>
+        <div class="key-row"><span>Move Project Up</span><kbd data-shortcut="ctrl-alt-shift-arrowup">⌘ + ⌥ + ⇧ + ↑</kbd></div>
+        <div class="key-row"><span>Move Project Down</span><kbd data-shortcut="ctrl-alt-shift-arrowdown">⌘ + ⌥ + ⇧ + ↓</kbd></div>
+        <div class="key-row"><span>Switch List Up</span><kbd data-shortcut="ctrl-alt-w">⌘ + ⌥ + W</kbd></div>
+        <div class="key-row"><span>Switch List Down</span><kbd data-shortcut="ctrl-alt-s">⌘ + ⌥ + S</kbd></div>
+        <div class="key-row"><span>Move List Up</span><kbd data-shortcut="ctrl-alt-shift-w">⌘ + ⌥ + ⇧ + W</kbd></div>
+        <div class="key-row"><span>Move List Down</span><kbd data-shortcut="ctrl-alt-shift-s">⌘ + ⌥ + ⇧ + S</kbd></div>
+        <div class="key-row"><span>New List</span><kbd data-shortcut="ctrl-alt-n">⌘ + ⌥ + N</kbd></div>
+        <div class="key-row"><span>Delete List</span><kbd data-shortcut="ctrl-alt-d">⌘ + ⌥ + D</kbd></div>
+        <div class="key-row"><span>Header 1</span><code>#</code></div>
+        <div class="key-row"><span>Header 2</span><code>##</code></div>
+        <div class="key-row"><span>Checkbox</span><code>-</code></div>
+        <div class="key-row"><span>Note</span><code>></code></div>
+        <div class="key-row">
+          <span><span class="color-swatch" style="background: yellow;"></span>Highlight</span>
+          <kbd data-shortcut="ctrl-alt-1">⌘ + ⌥ + 1</kbd>
+        </div>
+        <div class="key-row">
+          <span><span class="color-swatch" style="background: rgba(70,130,255,0.5);"></span>In Progress</span>
+          <kbd data-shortcut="ctrl-alt-2">⌘ + ⌥ + 2</kbd>
+        </div>
+        <div class="key-row">
+          <span><span class="color-swatch" style="background: rgba(180,90,220,0.5);"></span>Follow Up</span>
+          <kbd data-shortcut="ctrl-alt-3">⌘ + ⌥ + 3</kbd>
+        </div>
+        <div class="key-row">
+          <span><span class="color-swatch" style="background: rgba(255,60,60,0.5);"></span>Hold</span>
+          <kbd data-shortcut="ctrl-alt-4">⌘ + ⌥ + 4</kbd>
+        </div>
+      </div>
 
-  <div class="theme-picker-inside">
-    <label for="themeSelector">Theme:</label>
-    <select id="themeSelector" aria-label="Select Theme">
-      <option value="light">Light</option>
-      <option value="dark">Dark</option>
-      <option value="desert">Desert</option>
-      <option value="dracula">Dracula</option>
-      <option value="earth">Earth</option>
-    </select>
-  </div>
-</aside>
+      <div class="theme-picker-inside">
+        <label for="themeSelector">Theme:</label>
+        <select id="themeSelector" aria-label="Select Theme">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="desert">Desert</option>
+          <option value="dracula">Dracula</option>
+          <option value="earth">Earth</option>
+        </select>
+      </div>
+    </aside>
   </div>
 
   <!-- JavaScript -->
   <script src="../src/js/app.js" defer></script>
-
 </body>
 </html>
