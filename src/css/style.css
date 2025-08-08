@@ -9,73 +9,161 @@ body {
 }
 
 h1 {
-  margin-bottom: 24px;
+  text-align: center;
+  width: 100%;
+  margin: 24px 0;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+h1[contenteditable="true"] {
+  cursor: text;
+  user-select: text;
 }
 
 /* =======================================================
-  Layout Containers
+  Layout Containers - WINDOW-CENTERED MAIN WITH SIDEBAR OFFSET
 ======================================================= */
 .app-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  height: 100vh;
-  font-family: var(--font-mono);
-  position: relative;
 }
 
 .layout-row {
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 100%;
-  justify-content: flex-start; /* Align sidebar to the left */
+  min-width: 0;
 }
 
+/* ---- SIDEBAR ---- */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  height: 100vh;
+  background-color: transparent !important;
+  padding: 20px 14px;
+  z-index: 100;
+  overflow-y: auto;
+  transition: all 0.3s;
+}
+
+@media (max-width: 799px) {
+  #sidebar {
+    position: static;
+    width: 100%;
+    min-width: 0;
+    max-width: 100vw;
+    height: auto;
+    top: auto;
+    left: auto;
+    padding: 20px 14px;
+  }
+}
+
+/* ---- MAIN ---- */
 main {
-  flex: 1 1 auto;
-  max-width: 750px;
-  margin: 0 auto;
-  padding: 0 20px 60px 20px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  transition: all 0.3s;
+}
+
+/* On desktop: add invisible 200px spacer for true centering */
+@media (min-width: 800px) {
+  main::before {
+    content: "";
+    display: block;
+    width: 200px;
+    min-width: 200px;
+    height: 1px;
+    flex-shrink: 0;
+  }
 }
 
 .main-content {
   width: 100%;
   max-width: 750px;
+  margin: 0;
+  padding: 0 20px 60px 20px;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.main-safe {
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (min-width: 800px) {
+  .main-safe {
+    padding-left: 32px;
+  }
 }
 
-#sidebar {
-  flex: 0 0 200px; /* fixed width, no grow or shrink */
-  height: 100vh;
-  background-color: transparent;
-  padding: 20px 14px;
-  position: sticky; /* Optional: keeps it in view on scroll */
-  top: 0;
+@media (min-width: 800px) {
+  .main-content {
+    margin-left: -0px; /* or -40px, tweak to taste */
+  }
+}
+
+/* Responsive: reduce main-content width and padding as screen shrinks */
+@media (max-width: 950px) {
+  .main-content {
+    max-width: 90vw;
+    padding: 0 12px 40px 12px;
+  }
+}
+@media (max-width: 700px) {
+  .main-content {
+    max-width: 100vw;
+    padding: 0 6px 32px 6px;
+  }
+}
+@media (max-width: 500px) {
+  .main-content {
+    padding: 0 2px 16px 2px;
+  }
+}
+
+/* Mobile: stack sidebar and main, no fake margin */
+@media (max-width: 799px) {
+  .app-container,
+  .layout-row {
+    flex-direction: column;
+  }
+  main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  main::before {
+    display: none;
+  }
 }
 
 .key-spacer {
-  width: 320px;
-  flex-shrink: 0;
+  display: none !important;
 }
 
-@media (max-width: 1000px) {
-  .key-spacer {
-    display: none;
-  }
-
-  .layout-row {
-    justify-content: center;
-  }
+.list-nav-item {
+  cursor: pointer;
+  user-select: none;
 }
-
-.task-label:empty {
-  background-color: var(--color-label-hover);
-  min-height: 18px; /* Ensures it's still clickable */
-  display: inline-block;
+.list-nav-item[contenteditable="true"] {
+  cursor: text;
+  user-select: text;
 }
 
 /* =======================================================
@@ -159,6 +247,7 @@ main {
   flex-direction: column;
   gap: 4px;
   width: 100%;
+  min-width: 0;
 }
 
 .task-list {
@@ -200,6 +289,12 @@ main {
 .task-label:hover,
 .task-label:focus {
   background-color: var(--color-label-hover);
+}
+
+.task-label:empty {
+  background-color: var(--color-label-hover);
+  min-height: 18px; /* Ensures it's still clickable */
+  display: inline-block;
 }
 
 /* =======================================================
