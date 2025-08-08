@@ -51,4 +51,4 @@ Or serve with Docker + Nginx (optional for local hosting or deployment).
 
 ## License
 
-MIT © [Your Name]
+MIT © megacorvega
