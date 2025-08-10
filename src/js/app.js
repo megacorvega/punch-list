@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleIndicator.textContent = colorKey.classList.contains('open') ? '−' : '+';
       }
 
-      // 👉 Dynamically resize main content area
+      // Dynamically resize main content area
       if (appContainer) {
         appContainer.classList.toggle('key-open', colorKey.classList.contains('open'));
       }
@@ -173,7 +173,7 @@ function renderSidebar() {
 
     if (id === currentListId) li.classList.add('active');
 
-    // === NEW: Handle single vs double click ===
+    // === Handle single vs double click ===
     let clickTimeout = null;
 
     li.addEventListener('mousedown', (e) => {
