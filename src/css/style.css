@@ -1,11 +1,32 @@
 /* =======================================================
+  Root Layout Variables (global, not theme-bound)
+======================================================= */
+:root {
+  --font-mono: 'Cascadia Code', monospace;
+  --sidebar-w: 300px;       /* Sidebar width — adjust to fit key panel comfortably */
+  --key-collapsed-w: 160px; /* Key width when minimized */
+
+  /* Motion: snappy defaults */
+  --t-fast: 120ms;
+  --ease-snap: cubic-bezier(.2,.8,.2,1);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-fast: 0ms;
+  }
+}
+
+/* =======================================================
   Base Layout & Typography
 ======================================================= */
 body {
   font-family: var(--font-mono);
   background-color: var(--color-bg);
   color: var(--color-text);
-  margin: 0;
+  margin: 0; /* Ensure no margin */
+  padding: 0; /* Ensure no padding */
 }
 
 h1 {
@@ -14,7 +35,7 @@ h1 {
   margin: 24px 0;
   cursor: pointer;
   user-select: none;
-  transition: background 0.2s;
+  transition: background var(--t-fast) var(--ease-snap);
 }
 h1[contenteditable="true"] {
   cursor: text;
@@ -28,148 +49,149 @@ h1[contenteditable="true"] {
   min-height: 100vh;
   display: flex;
   flex-direction: row;
+  justify-content: center; /* Center the layout */
 }
 
 .layout-row {
   display: flex;
   flex-direction: row;
+  justify-content: center; /* Ensure columns inside layout-row are centered */
   width: 100%;
-  min-width: 0;
 }
 
 /* ---- SIDEBAR ---- */
 #sidebar {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 200px;
-  min-width: 200px;
-  max-width: 200px;
+  width: var(--sidebar-w); /* Sidebar width */
   height: 100vh;
-  background-color: transparent !important;
-  padding: 20px 14px;
+  background-color: transparent;
+  padding: 20px;
   z-index: 100;
-  overflow-y: auto;
-  transition: all 0.3s;
 }
 
-@media (max-width: 799px) {
-  #sidebar {
-    position: static;
-    width: 100%;
-    min-width: 0;
-    max-width: 100vw;
-    height: auto;
-    top: auto;
-    left: auto;
-    padding: 20px 14px;
-  }
+/* Fixed container for shortcuts, theme, and export/import buttons */
+#sidebar-footer {
+  position: fixed;
+  bottom: 10px; /* 10px from the bottom */
+  left: 10px;   /* 10px from the left */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  gap: 8px;   /* Reduced space between elements */
+  width: var(--sidebar-w); /* Match sidebar width */
+  padding: 10px;
+  z-index: 999; /* Ensure it's above other content */
 }
 
 /* ---- MAIN ---- */
 main {
+  width: 100%; /* Allow it to take full available width */
+  max-width: 750px; /* Limit to 750px */
+  margin: 0 auto;  /* Center horizontally */
+  padding: 0 20px 60px 20px;
+  box-sizing: border-box;
+  background: transparent;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh;
-  position: relative;
-  flex: 1 1 0%;
-  min-width: 0;
-  padding: 0;
-  margin: 0;
-  background: transparent;
-  transition: all 0.3s;
 }
 
-/* On desktop: add invisible 200px spacer for true centering */
-@media (min-width: 800px) {
-  main::before {
-    content: "";
-    display: block;
-    width: 200px;
-    min-width: 200px;
-    height: 1px;
-    flex-shrink: 0;
-  }
-}
-
+/* Content inside main */
 .main-content {
   width: 100%;
-  max-width: 750px;
-  margin: 0;
+  max-width: 750px; /* Ensure this is capped at 750px */
+  margin: 0 auto;    /* Center the content */
   padding: 0 20px 60px 20px;
   box-sizing: border-box;
-  position: relative;
   display: flex;
   flex-direction: column;
 }
+
 .main-safe {
   width: 100%;
   box-sizing: border-box;
 }
-@media (min-width: 800px) {
-  .main-safe {
-    padding-left: 32px;
-  }
-}
 
 @media (min-width: 800px) {
-  .main-content {
-    margin-left: -0px; /* or -40px, tweak to taste */
-  }
+  .main-safe { padding-left: 32px; }
 }
 
-/* Responsive: reduce main-content width and padding as screen shrinks */
 @media (max-width: 950px) {
-  .main-content {
-    max-width: 90vw;
-    padding: 0 12px 40px 12px;
-  }
+  .main-content { padding: 0 12px 40px 12px; }
 }
 @media (max-width: 700px) {
-  .main-content {
-    max-width: 100vw;
-    padding: 0 6px 32px 6px;
-  }
+  .main-content { padding: 0 6px 32px 6px; }
 }
 @media (max-width: 500px) {
-  .main-content {
-    padding: 0 2px 16px 2px;
-  }
+  .main-content { padding: 0 2px 16px 2px; }
 }
 
-/* Mobile: stack sidebar and main, no fake margin */
 @media (max-width: 799px) {
-  .app-container,
   .layout-row {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr; /* Stack the sidebar and main content vertically */
+  }
+  #sidebar {
+    grid-column: 1;
+    position: static;
+    width: 100%;
+    height: auto;
   }
   main {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  main::before {
-    display: none;
+    grid-column: 1;
   }
 }
 
-.key-spacer {
-  display: none !important;
+/* Hidden spacer element (kept for safety; not used) */
+.key-spacer { display: none !important; }
+
+/* =======================================================
+  List Navigation
+======================================================= */
+#listNav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;  
+  flex-direction: column;
+  gap: 6px;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .list-nav-item {
+  padding: 6px 10px;
+  border-radius: 6px;
+  background-color: transparent;
   cursor: pointer;
+  font-size: 13px;
+  transition: background-color var(--t-fast) var(--ease-snap);
+  outline: none;
+  color: var(--color-text);
   user-select: none;
 }
+.list-nav-item:hover {
+  background-color: var(--color-hover);
+}
+.list-nav-item.active {
+  background-color: var(--color-active-bg);
+  color: var(--color-active-text);
+  font-weight: bold;
+}
+.list-nav-item:focus {
+  background-color: var(--color-focus);
+}
 .list-nav-item[contenteditable="true"] {
+  border: 1px solid var(--color-outline);
+  padding: 5px 9px; /* adjust for border */
+  background-color: var(--color-input-bg, #5f5f5f);
   cursor: text;
-  user-select: text;
 }
 
 /* =======================================================
   Indentation
 ======================================================= */
-
 .indent-1::before,
 .indent-2::before,
 .indent-3::before,
@@ -184,60 +206,18 @@ main {
   border-radius: 2px;
 }
 
-.task-item {
-  position: relative; /* Needed for ::before */
-}
+.task-item { position: relative; } /* Needed for ::before */
 
 .task-item.indent-0 {
   font-weight: 600;
   padding-left: 4px;
 }
 
-/* =======================================================
-  List Navigation
-======================================================= */
-#listNav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
-.list-nav-item {
-  padding: 6px 10px;
-  border-radius: 6px;
-  background-color: transparent;
-  cursor: pointer;
-  font-size: 13px;
-  transition: background-color 0.2s ease;
-  outline: none;
-  color: var(--color-text);
-}
-
-.list-nav-item:hover {
-  background-color: var(--color-hover);
-}
-
-.list-nav-item.active {
-  background-color: var(--color-active-bg);
-  color: var(--color-active-text);
-  font-weight: bold;
-}
-
-.list-nav-item:focus {
-  background-color: var(--color-focus);
-}
-
-.list-nav-item[contenteditable="true"] {
-  border: 1px solid var(--color-outline);
-  padding: 5px 9px; /* adjust to compensate for border */
-  background-color: var(--color-input-bg, #5f5f5f); /* Optional */
-  cursor: text;
-}
+/* Visual horizontal offset */
+.indent-1 { margin-left: 20px; }
+.indent-2 { margin-left: 40px; }
+.indent-3 { margin-left: 60px; }
+.indent-4 { margin-left: 80px; }
 
 /* =======================================================
   Task List
@@ -283,7 +263,9 @@ main {
   caret-color: var(--color-text);
   white-space: pre-wrap;
   word-break: break-word;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--t-fast) var(--ease-snap);
+  -webkit-box-decoration-break: clone; /* ensure pill wraps across lines */
+  box-decoration-break: clone;
 }
 
 .task-label:hover,
@@ -304,7 +286,7 @@ main {
   background-color: var(--color-header-1);
   font-size: 14px;
   font-weight: bold;
-  padding: 4px 6px;
+  padding: 4px 6px 4px 12px; /* more left padding */
   border-radius: 4px;
   color: var(--color-header-1-text);
 }
@@ -312,7 +294,7 @@ main {
 .header-2 {
   background-color: var(--color-header-2);
   color: var(--color-header-2-text);
-  padding: 4px 0;
+  padding: 4px 0 4px 12px; /* more left padding */
   font-weight: bold;
   font-size: 16px;
   border-radius: 6px;
@@ -324,134 +306,23 @@ main {
   color: var(--color-note);
 }
 
+/* =======================================================
+  Highlight Colors (rounded)
+======================================================= */
+.highlight-yellow,
+.highlight-blue,
+.highlight-purple,
+.highlight-red {
+  border-radius: 6px;       /* rounded ends */
+  padding: 0 3px;           /* space for the curve */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
 .highlight-yellow {
   background-color: var(--color-highlight-yellow) !important;
-  color: #111 !important; /* Force dark font for contrast */
+  color: #111 !important;
 }
-
-/* =======================================================
-  Project Grouping
-======================================================= */
-.project-wrapper {
-  background-color: var(--color-project-bg);
-  border-radius: 12px;
-  padding: 10px;
-  margin-bottom: 12px;
-}
-
-.project-wrapper .task-item {
-  margin-bottom: 6px;
-}
-
-/* =======================================================
-  Indentation Utilities
-======================================================= */
-.indent-1 { margin-left: 20px; }
-.indent-2 { margin-left: 40px; }
-.indent-3 { margin-left: 60px; }
-.indent-4 { margin-left: 80px; }
-
-/* =======================================================
-  Buttons
-======================================================= */
-#exportJsonBtn,
-#importJsonTrigger {
-  padding: 6px 10px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  background-color: var(--color-button-bg);
-  color: var(--color-button-text);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-#exportJsonBtn:hover,
-#importJsonTrigger:hover {
-  background-color: var(--color-button-hover);
-}
-
-/* =======================================================
-  Color Key Legend
-======================================================= */
-.color-key {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: var(--color-legend-bg);
-  border: none;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-family: var(--font-mono);
-  max-width: 300px;
-  z-index: 1000;
-  cursor: pointer;
-}
-
-.color-key select {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  background-color: var(--color-button-bg);
-  color: var(--color-button-text);
-  border: none;
-  padding: 4px 6px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.color-key-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-
-#toggleKeyIndicator {
-  font-size: 16px;
-  font-family: var(--font-mono);
-  color: inherit;
-  padding: 0 4px;
-  line-height: 1;
-  user-select: none;
-  pointer-events: none; /* don't treat as a button */
-}
-
-.color-key-body {
-  display: none;
-  grid-template-columns: auto auto;
-  gap: 4px 12px;
-  align-items: center;
-}
-
-.color-key.open .color-key-body {
-  display: grid;
-}
-
-.color-key-body > div {
-  display: contents;
-}
-
-.color-label,
-.color-shortcut {
-  white-space: nowrap;
-  text-align: left;
-}
-
-.color-swatch {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  margin-right: 6px;
-  vertical-align: middle;
-}
-
-/* =======================================================
-  Highlight Colors
-======================================================= */
 
 .highlight-blue {
   background-color: rgba(70, 130, 255, 0.5) !important;
@@ -469,36 +340,222 @@ main {
 }
 
 /* =======================================================
-  Floating Theme Picker
+  Project Grouping
 ======================================================= */
-.theme-picker {
-  position: fixed;
-  top: 140px; /* Below the color-key */
-  right: 20px;
-  background-color: var(--color-legend-bg);
-  padding: 8px 10px;
-  border-radius: 10px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.project-wrapper {
+  background-color: var(--color-project-bg);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.project-wrapper .task-item {
+  margin-bottom: 6px;
 }
 
-.theme-picker label {
-  font-weight: bold;
+/* =======================================================
+  Buttons
+======================================================= */
+.export-import-buttons {
+  display: flex; /* Align buttons side by side */
+  gap: 10px; /* Space between buttons */
+  width: 100%; /* Full width */
 }
 
-.theme-picker select {
+#exportJsonBtn,
+#importJsonTrigger {
+  padding: 6px 10px;
   font-family: var(--font-mono);
   font-size: 12px;
   background-color: var(--color-button-bg);
   color: var(--color-button-text);
   border: none;
-  padding: 4px 6px;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease-snap), transform var(--t-fast) var(--ease-snap);
+  flex: 1; /* Allow buttons to take equal space */
+}
+
+#exportJsonBtn:hover,
+#importJsonTrigger:hover {
+  background-color: var(--color-button-hover);
+}
+
+#exportJsonBtn:active,
+#importJsonTrigger:active {
+  transform: translateY(1px);
+}
+
+/* =======================================================
+  Shortcuts Panel (inside sidebar) — collapsible, two-column rows
+======================================================= */
+.color-key {
+  position: static;
+  width: 100%;                    /* Expanded by default */
+  max-width: var(--sidebar-w);    /* Match sidebar width */
+  background-color: var(--color-legend-bg);
+  border: none;
+  border-radius: 10px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition:
+    width var(--t-fast) var(--ease-snap),
+    max-width var(--t-fast) var(--ease-snap),
+    padding var(--t-fast) var(--ease-snap),
+    transform var(--t-fast) var(--ease-snap);
+  will-change: width, transform;
+}
+
+/* Expanded state (normal padding) */
+.color-key.open {
+  padding: 10px 10px; /* More padding when expanded */
+}
+
+/* Collapsed state (reduced vertical padding) */
+.color-key:not(.open) {
+  padding: 4px 10px; /* Reduced padding when collapsed */
+}
+
+/* Header row */
+.color-key-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+#toggleKeyIndicator {
+  font-size: 16px;
+  font-family: var(--font-mono);
+  color: inherit;
+  padding: 0 4px;
+  line-height: 1;
+  user-select: none; /* don't select +/− */
+  pointer-events: none; /* indicator only */
+  transition: transform var(--t-fast) var(--ease-snap);
+}
+
+/* rotate the +/- quickly when opening/closing */
+.color-key.open #toggleKeyIndicator {
+  transform: rotate(90deg);
+}
+
+/* Body: show/hide */
+.color-key-body {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  transition: opacity var(--t-fast) var(--ease-snap);
+}
+
+.color-key.open .color-key-body {
+  display: flex;
+  opacity: 1;
+}
+
+/* Each shortcut row: label on the left, key on the right */
+.key-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto; /* Left fills, right hugs content */
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.key-row > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* prevent spilling past the panel */
+}
+.key-row kbd,
+.key-row code {
+  justify-self: end;
+  white-space: nowrap;
+}
+
+/* Color swatch (used in some labels) */
+.color-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* =======================================================
+  Theme Panel (separate container, matching style)
+======================================================= */
+.theme-selector-container {
+  margin-top: 8px; /* Reduced space between shortcut dropdown and theme selector */
+  background-color: var(--color-legend-bg);
+  border-radius: 10px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.theme-selector-container label {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* Custom select: rounded, with subtle caret animation on hover/focus */
+#themeSelector {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  border: none;
+  padding: 6px 32px 6px 12px; /* room for caret */
+  border-radius: 20px; /* pill shape */
+  cursor: pointer;
+  appearance: none; /* remove native select arrow */
+  transition:
+    background-position var(--t-fast) var(--ease-snap),
+    background-size var(--t-fast) var(--ease-snap),
+    box-shadow var(--t-fast) var(--ease-snap);
+
+  /* caret (two chevrons) drawn with gradients */
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-button-text) 50%),
+    linear-gradient(135deg, var(--color-button-text) 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) calc(50% - 3px),
+    calc(100% - 11px) calc(50% - 3px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+#themeSelector:hover,
+#themeSelector:focus {
+  background-position:
+    calc(100% - 16px) calc(50% + 3px),
+    calc(100% - 11px) calc(50% + 3px);
+}
+#themeSelector:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-focus);
+}
+
+/* Mobile: full width for both panels */
+@media (max-width: 799px) {
+  .color-key,
+  .color-key.open,
+  .color-key:not(.open),
+  .theme-selector-container {
+    width: 100%; /* Fill the full width */
+    max-width: 100%; /* Ensure it does not extend beyond the sidebar */
+  }
 }
 
 /* =======================================================
@@ -511,9 +568,8 @@ kbd {
   border-radius: 4px;
   font-size: 11px;
   display: inline-block;
-  white-space: nowrap;
+  white-space: nowrap; /* Prevent line break inside key label */
 }
-
 code {
   background: var(--color-button-bg);
   color: var(--color-button-text);
@@ -528,8 +584,8 @@ code {
 ======================================================= */
 #versionBox {
   position: fixed;
-  bottom: 10px;
-  left: 10px;
+  top: 10px; /* Move to the top */
+  right: 10px; /* Align to the right */
   font-family: var(--font-mono);
   font-size: 12px;
   padding: 4px 8px;
@@ -542,11 +598,14 @@ code {
 }
 
 /* =======================================================
-  Animation
+  Animation (tasks)
 ======================================================= */
-/* Slide-out + collapse effect */
 .task-slide-out {
-  transition: opacity 0.2s ease, transform 0.2s ease, height 0.2s ease, margin 0.2s ease;
+  transition:
+    opacity var(--t-fast) var(--ease-snap),
+    transform var(--t-fast) var(--ease-snap),
+    height var(--t-fast) var(--ease-snap),
+    margin var(--t-fast) var(--ease-snap);
   opacity: 0;
   transform: translateX(20px);
   height: 0;
@@ -554,18 +613,10 @@ code {
   overflow: hidden;
 }
 
-/* Slide-in effect (reset after move) */
 .task-slide-in {
-  animation: slideInTask 0.2s ease;
+  animation: slideInTask var(--t-fast) var(--ease-snap);
 }
-
 @keyframes slideInTask {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
