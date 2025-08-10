@@ -1,7 +1,5 @@
 /* =======================================================
   🧭 THEME VARIABLE GUIDE
-  Use this reference to understand what each variable controls.
-  These are used in all themes (light, dark, desert, etc.)
 ======================================================= */
 
 /* === Typography === */
@@ -25,7 +23,7 @@
 /* === Header Styling === */
 /* --color-header-1: Background color for level 1 headers (# Title) */
 /* --color-header-1-text: Text color for level 1 headers */
-/* --color-header-2-bg: Background color for level 2 headers (## Project) */
+/* --color-header-2: Background color for level 2 headers (## Project) */
 /* --color-header-2-text: Text color for level 2 headers */
 
 /* === Special Content === */
@@ -54,12 +52,11 @@
 /* --color-accent-warm: Optional: a warm secondary color */
 /* --color-accent-bold: Optional: a strong contrasting accent */
 
-/* Default fallback */
-:root {
-  --font-mono: 'Cascadia Code', monospace;
-}
+/* ############## */
+/* ### THEMES ### */
+/* ############## */
 
-/* === Desert Theme === */
+/* === Desert === */
 body.theme-desert {
   --color-bg: #fdf3e7;
   --color-surface: #e8decf;
@@ -76,7 +73,7 @@ body.theme-desert {
   --color-header-1: rgba(180, 160, 130, 0.2);
   --color-header-1-text: #2b2b2b;
 
-  --color-header-2-bg: #bc6c25;
+  --color-header-2: #bc6c25;
   --color-header-2-text: #5a4633;
 
   --color-note: #4e5a45;
@@ -93,7 +90,7 @@ body.theme-desert {
   --color-label-hover: rgba(133, 103, 44, 0.123);
 }
 
-/* === Dracula Theme === */
+/* === Dracula === */
 body.theme-dracula {
   --color-bg: #282a36;
   --color-surface: #44475a;
@@ -110,7 +107,7 @@ body.theme-dracula {
   --color-header-1: rgba(189, 147, 249, 0.15);
   --color-header-1-text: #f8f8f2;
 
-  --color-header-2-bg: #ff79c6;
+  --color-header-2: #6272a4;
   --color-header-2-text: #50fa7b;
 
   --color-note: #8be9fd;
@@ -127,10 +124,8 @@ body.theme-dracula {
   --color-label-hover: rgba(189, 147, 249, 0.15);
 }
 
-/* === Light Theme === */
+/* === Light === */
 body.theme-light {
-  --font-mono: 'Cascadia Code', monospace;
-
   --color-bg: #f7f7f5;
   --color-surface: #e9e9e7;
   --color-sidebar-bg: #dfdfdc;
@@ -146,8 +141,8 @@ body.theme-light {
   --color-header-1: rgba(0, 0, 0, 0.06);
   --color-header-1-text: #333333;
 
-  --color-header-2-bg: #444444;
-  --color-header-2-text: #4e4e4e;
+  --color-header-2: #cecece;
+  --color-header-2-text: #2c2c2c;
 
   --color-note: #444444;
 
@@ -165,7 +160,7 @@ body.theme-light {
   --color-legend-bg: #e3e3e0;
 }
 
-/* === Dark Theme (ChatGPT-style) === */
+/* === Dark === */
 body.theme-dark {
   --color-bg: #1e1e1e;
   --color-surface: #2c2c2c;
@@ -182,7 +177,7 @@ body.theme-dark {
   --color-header-1: rgba(200, 200, 200, 0.1);
   --color-header-1-text: #eaeaea;
 
-  --color-header-2-bg: #10a37f;
+  --color-header-2: #444444;
   --color-header-2-text: #ffffff;
 
   --color-note: #cccccc;
@@ -199,10 +194,8 @@ body.theme-dark {
   --color-label-hover: rgba(255, 255, 255, 0.08);
 }
 
-/* === Earth Theme === */
+/* === Earth === */
 body.theme-earth {
-  --font-mono: 'Cascadia Code', monospace;
-
   --color-bg: #fefae0;
   --color-surface: #f2f0dd;
   --color-sidebar-bg: #283618;
@@ -218,7 +211,7 @@ body.theme-earth {
   --color-header-1: rgba(96, 108, 56, 0.25);
   --color-header-1-text: #283618;
 
-  --color-header-2-bg: #dda15e;
+  --color-header-2: #dda15e;
   --color-header-2-text: #283618;
 
   --color-note: #4a5131;
@@ -238,4 +231,189 @@ body.theme-earth {
 
   --color-accent-warm: #dda15e;
   --color-accent-bold: #bc6c25;
+}
+
+/* === Nord === */
+body.theme-nord {
+  --color-bg: #2e3440;
+  --color-surface: #3b4252;
+  --color-sidebar-bg: #343a46;
+
+  --color-text: #e5e9f0;
+  --color-muted-text: #a7b1c2;
+
+  --color-hover: rgba(255, 255, 255, 0.05);
+  --color-focus: rgba(255, 255, 255, 0.12);
+  --color-active-bg: #4c566a;
+  --color-active-text: #eceff4;
+
+  --color-header-1: rgba(143, 188, 187, 0.14);
+  --color-header-1-text: #e5e9f0;
+
+  --color-header-2: #88c0d0;
+  --color-header-2-text: #1f2630;
+
+  --color-note: #a3be8c;
+
+  --color-outline: rgba(255, 255, 255, 0.16);
+  --color-highlight-yellow: #ebcb8b;
+  --color-project-bg: #3b4252;
+
+  --color-button-bg: #5e81ac;
+  --color-button-hover: #6b8fbe;
+  --color-button-text: #eceff4;
+
+  --color-legend-bg: #3b4252;
+  --color-label-hover: rgba(143, 188, 187, 0.12);
+
+  --color-accent-warm: #d08770;
+  --color-accent-bold: #bf616a;
+}
+
+/* === One Dark === */
+body.theme-one-dark {
+  --color-bg: #21252b;
+  --color-surface: #2c313a;
+  --color-sidebar-bg: #262a31;
+
+  --color-text: #e6e6e6;
+  --color-muted-text: #7f848e;
+
+  --color-hover: rgba(255, 255, 255, 0.05);
+  --color-focus: rgba(255, 255, 255, 0.12);
+  --color-active-bg: #3a3f4b;
+  --color-active-text: #ffffff;
+
+  --color-header-1: rgba(97, 175, 239, 0.12);
+  --color-header-1-text: #e6e6e6;
+
+  --color-header-2: #61afef;
+  --color-header-2-text: #1e2227;
+
+  --color-note: #98c379;
+
+  --color-outline: rgba(255, 255, 255, 0.16);
+  --color-highlight-yellow: #e5c07b;
+  --color-project-bg: #2c313a;
+
+  --color-button-bg: #98c379;
+  --color-button-hover: #86b16b;
+  --color-button-text: #1e2227;
+
+  --color-legend-bg: #2c313a;
+  --color-label-hover: rgba(97, 175, 239, 0.12);
+
+  --color-accent-warm: #d19a66;
+  --color-accent-bold: #c678dd;
+}
+
+/* === Solarized Light === */
+body.theme-solarized-light {
+  --color-bg: #fdf6e3;
+  --color-surface: #eee8d5;
+  --color-sidebar-bg: #e9e1c9;
+
+  --color-text: #586e75;
+  --color-muted-text: #93a1a1;
+
+  --color-hover: rgba(0, 0, 0, 0.04);
+  --color-focus: rgba(0, 0, 0, 0.10);
+  --color-active-bg: #d6cfb4;
+  --color-active-text: #073642;
+
+  --color-header-1: rgba(38, 139, 210, 0.14);
+  --color-header-1-text: #073642;
+
+  --color-header-2: #2aa198;
+  --color-header-2-text: #073642;
+
+  --color-note: #6c71c4;
+
+  --color-outline: rgba(0, 0, 0, 0.15);
+  --color-highlight-yellow: #efe7b5;
+  --color-project-bg: #ece4cc;
+
+  --color-button-bg: #268bd2;
+  --color-button-hover: #1f78b6;
+  --color-button-text: #fdf6e3;
+
+  --color-legend-bg: #efe7d2;
+  --color-label-hover: rgba(38, 139, 210, 0.10);
+
+  --color-accent-warm: #b58900;
+  --color-accent-bold: #cb4b16;
+}
+
+/* === Solarized Dark === */
+body.theme-solarized-dark {
+  --color-bg: #002b36;
+  --color-surface: #073642;
+  --color-sidebar-bg: #06313b;
+
+  --color-text: #eee8d5;
+  --color-muted-text: #93a1a1;
+
+  --color-hover: rgba(255, 255, 255, 0.05);
+  --color-focus: rgba(255, 255, 255, 0.12);
+  --color-active-bg: #0e3a45;
+  --color-active-text: #fdf6e3;
+
+  --color-header-1: rgba(42, 161, 152, 0.16);
+  --color-header-1-text: #eee8d5;
+
+  --color-header-2: #2aa198;
+  --color-header-2-text: #002b36;
+
+  --color-note: #b58900;
+
+  --color-outline: rgba(255, 255, 255, 0.16);
+  --color-highlight-yellow: #ead27a;
+  --color-project-bg: #073642;
+
+  --color-button-bg: #268bd2;
+  --color-button-hover: #1f78b6;
+  --color-button-text: #fdf6e3;
+
+  --color-legend-bg: #083a46;
+  --color-label-hover: rgba(42, 161, 152, 0.14);
+
+  --color-accent-warm: #cb4b16;
+  --color-accent-bold: #6c71c4;
+}
+
+/* === Catppuccin Mocha === */
+body.theme-catppuccin-mocha {
+  --color-bg: #1e1e2e;
+  --color-surface: #242436;
+  --color-sidebar-bg: #1f1f30;
+
+  --color-text: #cad3f5;
+  --color-muted-text: #a6adc8;
+
+  --color-hover: rgba(255, 255, 255, 0.05);
+  --color-focus: rgba(255, 255, 255, 0.12);
+  --color-active-bg: #313244;
+  --color-active-text: #e6e9ff;
+
+  --color-header-1: rgba(139, 213, 202, 0.14);
+  --color-header-1-text: #cad3f5;
+
+  --color-header-2: #8bd5ca;
+  --color-header-2-text: #1e1e2e;
+
+  --color-note: #a6e3a1;
+
+  --color-outline: rgba(255, 255, 255, 0.14);
+  --color-highlight-yellow: #eed49f;
+  --color-project-bg: #26263a;
+
+  --color-button-bg: #a6e3a1;
+  --color-button-hover: #94d18f;
+  --color-button-text: #1e1e2e;
+
+  --color-legend-bg: #242436;
+  --color-label-hover: rgba(139, 213, 202, 0.14);
+
+  --color-accent-warm: #f2cdcd;
+  --color-accent-bold: #c6a0f6;
 }
