@@ -49,6 +49,10 @@ Or serve with Docker + Nginx (optional for local hosting or deployment).
 
 ---
 
+## Known Issues (v0.9.8)
+- Checked box doesn't stay within parent
+- Lots of movement functionality, mainly moving subtasks through projects/parents and parents absorbing children inadvertently when moving up or down 
+
 ## License
 
 MIT © megacorvega
