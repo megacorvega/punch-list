@@ -1,3 +1,6 @@
+//
+// PUNCH LIST - app.js
+//
 // ===========================
 // Platform-Aware Shortcut Helper
 // ===========================
@@ -77,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       colorKey.classList.toggle('open');
       if (toggleIndicator) {
-        toggleIndicator.textContent = colorKey.classList.contains('open') ? '−' : '+';
+        toggleIndicator.textContent = colorKey.classList.contains('open') ? '-' : '+';
       }
 
       // Dynamically resize main content area
@@ -854,24 +857,44 @@ function handleKeyboardEvents(e) {
   }
 
   // ===============================
-  // Enter → New Task / Toggle Checkbox
-  // ===============================
-  if (key === 'enter') {
-    e.preventDefault();
+// Enter → New Task / Toggle Checkbox
+// ===============================
+if (key === 'enter') {
+  e.preventDefault();
 
-    // Regular Enter: new task below
-    const newTask = createTaskElement({ indent: getIndentLevel(li) });
-    insertAfter(li, newTask);
-    regroupProjects();
-    saveCurrentList();
-    setTimeout(() => {
-      const newLabel = newTask.querySelector('.task-label');
-      ensureTextNode(newLabel);
-      newLabel?.focus();
-      setCaretPosition(newLabel, 0);
-    }, 0);
-    return;
+  // Shift + Enter → Toggle checkbox
+  if (e.shiftKey) {
+    const checkbox = li.querySelector('input[type="checkbox"]');
+    if (checkbox) {
+      checkbox.checked = !checkbox.checked;
+      updateCheckboxState(checkbox);
+      
+      // Restore focus to the same item
+      setTimeout(() => {
+        const freshLabel = li.querySelector('.task-label');
+        if (freshLabel) {
+          ensureTextNode(freshLabel);
+          freshLabel.focus();
+          setCaretPosition(freshLabel, caretOffset); // Use preserved caret position
+        }
+      }, 0);
+      return; // Stop further execution
+    }
   }
+
+  // Regular Enter → new task below
+  const newTask = createTaskElement({ indent: getIndentLevel(li) });
+  insertAfter(li, newTask);
+  regroupProjects();
+  saveCurrentList();
+  setTimeout(() => {
+    const newLabel = newTask.querySelector('.task-label');
+    ensureTextNode(newLabel);
+    newLabel?.focus();
+    setCaretPosition(newLabel, 0);
+  }, 0);
+  return;
+}
 
 // ===============================
 // Backspace → remove style or task
